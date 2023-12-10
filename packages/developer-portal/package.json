@@ -10,6 +10,7 @@
     "@types/node": "^16.18.68",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
+    "esbuild": "^0.19.9",
     "graphql": "^16.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -18,10 +19,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "npm run clean && node build.js && tsc --emitDeclarationOnly --outDir dist",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run build"
   },
   "eslintConfig": {
     "extends": [
