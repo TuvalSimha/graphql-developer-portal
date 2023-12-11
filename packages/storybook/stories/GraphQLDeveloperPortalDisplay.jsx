@@ -6,6 +6,13 @@ import introspection from "../../developer-portal/src/examples/my-schema.introsp
  * Primary UI component for user interaction
  */
 export const GraphQLDeveloperPortalDisplay = () => {
+  const config = {
+    introspection,
+    showQueries: true,
+    showMutations: true,
+    showSubscriptions: true,
+  };
+
   return (
     <div
       style={{
@@ -16,9 +23,10 @@ export const GraphQLDeveloperPortalDisplay = () => {
         justifyContent: "start",
         backgroundColor: "#f5f5f5",
         alignItems: "start",
+        textAlign: "center",
       }}
     >
-      <GraphQLDeveloperPortal schema={introspection} />
+      <GraphQLDeveloperPortal config={config} />
     </div>
   );
 };
