@@ -1,6 +1,6 @@
 interface GraphQLDeveloperPortalProps {
   config?: {
-    introspection: any;
+    introspection: IntrospectionSchema;
     showQueries?: boolean;
     showMutations?: boolean;
     showSubscriptions?: boolean;
