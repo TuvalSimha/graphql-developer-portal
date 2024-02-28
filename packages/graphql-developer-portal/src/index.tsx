@@ -4,7 +4,7 @@ interface Props {
   schemaPath: any;
 }
 
-const App = ({ schemaPath }: Props) => {
+const App: React.FC<Props> = ({ schemaPath }) => {
   const schemaData = schema(schemaPath);
   return schemaData;
 };
