@@ -9,18 +9,21 @@
     "build": "npm run clean && node build.js && tsc --emitDeclarationOnly --outDir dist",
     "clean": "rimraf dist",
     "dev": "node serve.js",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "introspect": "graphql-inspector introspect src/example/schema.graphql --write src/example/introspection.json"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "chokidar": "^3.5.2",
     "esbuild": "^0.14.10",
+    "graphql": "^16.8.1",
     "live-server": "^1.2.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.5.4"
   },
   "dependencies": {
+    "@graphql-inspector/cli": "^4.0.3",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
     "react": "^17.0.2",

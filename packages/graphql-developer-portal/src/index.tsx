@@ -1,9 +1,12 @@
-import React from "react";
+import { schema } from "components/schema";
 
 interface Props {
-  foo: string;
+  schemaPath: any;
 }
 
-const App: React.FC<Props> = ({ foo }) => <div>Foo's value is: {foo}</div>;
+const App = ({ schemaPath }: Props) => {
+  const schemaData = schema(schemaPath);
+  return schemaData;
+};
 
 export default App;
