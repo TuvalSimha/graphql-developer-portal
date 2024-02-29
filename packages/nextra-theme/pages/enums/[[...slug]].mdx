@@ -19,17 +19,22 @@ export const getStaticProps = async ({ params }) => {
   const allEnums = introspection.__schema.types.filter(
     (type) => type.kind === "ENUM"
   );
-  // Extract the enum name from the params.slug
-  const enumName =
-    params.slug &&
-    params.slug[0]
-      .replace(/^\/|\/$/g, "")
-      .replace(/_/g, "")
-      .toLowerCase();
+  console.log("allEnums ----> 1", allEnums);
+  const slug = params.slug
+    .join("/")
+    .replace(/\/$/, "")
+    .replace(/__/, "")
+    .toLowerCase();
+  console.log("slug ----> 2", slug);
   // Find the matching enum object
-  const enumObject = allEnums.find(
-    (type) => type.name.toLowerCase() === enumName
+  const enumNameClean = allEnums.map((type) =>
+    type.name.toLowerCase().replace(/__/, "")
   );
+  console.log("enumNameClean ----> 3", enumNameClean);
+  const enumObject = allEnums.find(
+    (type) => type.name.toLowerCase().replace(/__/, "") === slug
+  );
+  console.log("enumObject ----> 4", enumObject);
   // If enumObject is not found, you might want to handle it accordingly
   if (!enumObject) {
     return {
