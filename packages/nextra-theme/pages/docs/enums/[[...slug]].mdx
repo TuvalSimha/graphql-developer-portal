@@ -1,5 +1,5 @@
 import { Callout, RemoteContent } from "nextra/components";
-import introspection from "../../example/introspection.json";
+import introspection from "../../../example/introspection.json";
 import { buildDynamicMDX, buildDynamicMeta } from "nextra/remote";
 
 export const getStaticPaths = async () => {
@@ -19,31 +19,36 @@ export const getStaticProps = async ({ params }) => {
   const allEnums = introspection.__schema.types.filter(
     (type) => type.kind === "ENUM"
   );
-  console.log("allEnums ----> 1", allEnums);
   const slug = params.slug
     .join("/")
     .replace(/\/$/, "")
     .replace(/__/, "")
     .toLowerCase();
-  console.log("slug ----> 2", slug);
-  // Find the matching enum object
   const enumNameClean = allEnums.map((type) =>
     type.name.toLowerCase().replace(/__/, "")
   );
-  console.log("enumNameClean ----> 3", enumNameClean);
   const enumObject = allEnums.find(
     (type) => type.name.toLowerCase().replace(/__/, "") === slug
   );
-  console.log("enumObject ----> 4", enumObject);
   // If enumObject is not found, you might want to handle it accordingly
   if (!enumObject) {
     return {
       notFound: true,
     };
   }
+  const page = `
+  # ${enumObject.name}
+  ${enumObject.description || ""}
+  ${enumObject.enumValues.map(
+    (value) => `
+  ## ${value.name}
+  ${value.description || ""}
+  `
+  )}
+  `;
   // Fetch dynamic MDX content based on the enum title
   const { __nextra_pageMap } = await buildDynamicMeta();
-  const dynamicMdx = await buildDynamicMDX(enumObject.name, {
+  const dynamicMdx = await buildDynamicMDX(page, {
     defaultShowCopyCode: true,
   });
   return {

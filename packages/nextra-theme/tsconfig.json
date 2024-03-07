@@ -109,7 +109,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "pages/enums/_meta.ts", "theme.config.jsx"  ],
+, "pages/docs/enums/_meta.ts", "theme.config.jsx"  ],
   "exclude": [
     "node_modules"
   ]

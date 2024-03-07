@@ -1,0 +1,81 @@
+import { Callout, RemoteContent } from "nextra/components";
+import introspection from "../../../example/introspection.json";
+import { buildDynamicMDX, buildDynamicMeta } from "nextra/remote";
+
+export const getStaticPaths = async () => {
+  const objectsPaths = introspection.__schema.types
+    .filter((type) => type.kind === "OBJECT")
+    .map((objectsType) => `/${objectsType.name.toLowerCase()}`);
+  return {
+    fallback: "blocking",
+    paths: objectsPaths.map((filePath) => ({
+      params: { slug: [filePath] },
+    })),
+  };
+};
+
+export const getStaticProps = async ({ params }) => {
+  // Fetch all OBJECTS
+  const allObjects = introspection.__schema.types.filter(
+    (type) => type.kind === "OBJECT"
+  );
+  const slug = params.slug
+    .join("/")
+    .replace(/\/$/, "")
+    .replace(/__/, "")
+    .toLowerCase();
+  console.log("slug ----> 2", slug);
+  const objectNameClean = allObjects.map((type) =>
+    type.name.toLowerCase().replace(/__/, "")
+  );
+  const objects = allObjects.find(
+    (type) => type.name.toLowerCase().replace(/__/, "") === slug
+  );
+  // If objects is not found, you might want to handle it accordingly
+  if (!objects) {
+    return {
+      notFound: true,
+    };
+  }
+  const page = `
+  # ${objects.name}
+  ${objects.description || ""}
+  ${objects.fields
+    .map(
+      (field) => `
+  ## ${field.name}
+  ${field.description || ""}
+  ${field.args.length > 0 ? `### Arguments` : ""}
+  ${field.args
+    .map(
+      (arg) => `
+  - **${arg.name}** ${arg.description || ""}
+  `
+    )
+    .join("\n")}
+  `
+    )
+    .join("\n")}
+  ${objects.interfaces.length > 0 ? `### Interfaces` : ""}
+  ${objects.interfaces
+    .map(
+      (interfaceType) => `
+  - **${interfaceType.name}** ${interfaceType.description || ""}
+  `
+    )
+    .join("\n")}
+  `;
+  // Fetch dynamic MDX content based on the enum title
+  const { __nextra_pageMap } = await buildDynamicMeta();
+  const dynamicMdx = await buildDynamicMDX(page, {
+    defaultShowCopyCode: true,
+  });
+  return {
+    props: {
+      __nextra_pageMap,
+      ...dynamicMdx,
+    },
+  };
+};
+
+<RemoteContent components={{ Callout }} />
