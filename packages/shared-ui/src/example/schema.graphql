@@ -1,0 +1,19 @@
+enum SortOrder {
+  ASC
+  DESC
+}
+
+type Book {
+  title: String
+  author: Author
+}
+
+type Author {
+  name: String
+  books: [Book]
+}
+
+type Query {
+  books(sort: SortOrder): [Book]
+  authors: [Author]
+}
